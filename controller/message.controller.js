@@ -1,7 +1,7 @@
-const Message = require('../model/role.schema.js');
+const Message = require('../model/message.model.js');
 
 const getAll = (req, res, next) => {
-    let result = Role.findAll();
+    let result = Message.findAll();
     res.status(200).json(result);
 }
 
@@ -22,12 +22,20 @@ const create = async (req, res, next) => {
         });
         res.status(201).json(result);
     } catch (e) {
-        res.status(400).json({ error: e.message });
+        res.status(400).json({ error: "Cannot create message" });
     }
 }
 
 const update = (req, res, next) => {
-    let result = Message.updateOne(req.body, { id: req.params.id });
+    const updateData = {};
+
+    if (req.body.title) {
+        updateData.title = req.body.title;
+    }
+    if (req.body.content) {
+        updateData.content = req.body.content;
+    }
+    let result = Message.updateOne(updateData, { id: req.params.id });
     res.status(201).json(result);
 }
 
