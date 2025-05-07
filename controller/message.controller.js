@@ -1,4 +1,4 @@
-const Message = require('../model/message.model.js');
+const Message = require('../model/message.shema.js');
 
 const getAll = (req, res, next) => {
     let result = Message.findAll();

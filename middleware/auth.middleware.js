@@ -1,9 +1,19 @@
 const jwt = require("jsonwebtoken");
 const Role = require('../model/role.schema.js');
+const fs = require('fs');
+
 require('dotenv').config();
+
+const blockedIps = fs.readFileSync('./blacklist_ips.txt', "utf-8").split('\n');
 
 const auth = (role) => {
     return (req, res, next) => {
+        const ip = req.ip;
+
+        if (blockedIps.includes(ip)) {
+            return res.status(403).json({ message: "Accès interdit" });
+        }
+
         const token = req.headers.authorization?.split(" ")[1];
         try {
             req.payload = jwt.verify(token, process.env.JWT_KEY);
