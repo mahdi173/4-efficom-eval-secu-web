@@ -22,12 +22,18 @@ const create = async (req, res, next) => {
         });
         res.status(201).json(result);
     } catch (e) {
-        res.status(400).json({ error: e.message });
+        res.status(400).json({ error: "Cannot create role" });
     }
 }
 
 const update = (req, res, next) => {
-    let result = Role.updateOne(req.body, { id: req.params.id });
+    const updateData = {};
+
+    if (req.body.name) {
+        updateData.name = req.body.name;
+    }
+
+    let result = Role.updateOne(updateData, { id: req.params.id });
     res.status(201).json(result);
 }
 
