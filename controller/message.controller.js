@@ -29,6 +29,12 @@ const create = async (req, res, next) => {
 const update = (req, res, next) => {
     const updateData = {};
 
+    let messageToUpdate =  Message.findOne({where:{id: req.params.id}});
+
+    if(messageToUpdate.userId !== req.payload.id){
+        res.status(403).json({error: "You cannot change this message"});
+    }
+
     if (req.body.title) {
         updateData.title = req.body.title;
     }
@@ -40,6 +46,12 @@ const update = (req, res, next) => {
 }
 
 const remove = (req, res, next) => {
+    let messageToUpdate =  Message.findOne({where:{id: req.params.id}});
+
+    if(messageToUpdate.userId !== req.payload.id){
+        res.status(403).json({error: "You cannot delete this message"});
+    }
+
     let result = Message.remove(req.params.id);
     res.status(200).json(result);
 }
